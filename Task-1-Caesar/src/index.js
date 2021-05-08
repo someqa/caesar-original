@@ -1,36 +1,21 @@
-const stringToProcess = 'abc2a x yz выв 73 a';
-const shift = 1;
+const inputFile='./input.txt';
+const outputFile='./output.txt'
 
-const lowerAlphabet = 'abcdefghijklmnopqrstuvwxyz';
-const upperAlhabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const {getShiftedString}=require('./shiftedString');
+const fs=require('fs');
+const { pipeline, Transform } = require('stream');
 
-function getStringIndexMap(str) {
-  return str
-    .split('')
-    .reduce((map, letter, index) => map.set(letter, index), new Map());
+function processFileInput(inputFilePath, shift, outputFilePath){
+    const transformer=new Transform({
+        transform:(chunk, _, done)=>
+        done(null, getShiftedString(chunk.toString(), shift) )
+    })
+    return pipeline(
+        fs.createReadStream(inputFilePath),
+        transformer,
+        fs.createWriteStream(outputFilePath),
+        (err)=>console.log(err)
+    )
 }
 
-const lowerMap = getStringIndexMap(lowerAlphabet);
-const upperMap = getStringIndexMap(upperAlhabet);
-
-function getCorrectedShift(shift, alhabetLength = 26) {
-  return shift >= 0
-    ? shift % alhabetLength
-    : (alhabetLength + shift) % alhabetLength;
-}
-
-function getShiftedLetter(letter, shift) {
-  const isInUppercase = letter === letter.toUpperCase();
-  const mapToUse = isInUppercase ? upperMap : lowerMap;
-  const initialIndex = mapToUse.get(letter);
-  if (initialIndex === undefined) return letter;
-  const newIndex = getCorrectedShift(initialIndex + shift);
-  return isInUppercase ? upperAlhabet[newIndex] : lowerAlphabet[newIndex];
-}
-
-function getShiftedString(text, shift) {
-  return text.split('').map(letter=>getShiftedLetter(letter, shift)).join('');
-}
-
-console.log(stringToProcess);
-console.log(getShiftedString(stringToProcess, shift))
+processFileInput(inputFile, 1, outputFile)

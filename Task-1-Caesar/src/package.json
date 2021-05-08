@@ -1,0 +1,9 @@
+{
+  "name": "Task-1-Caesar-cipher-CLI-tool",
+  "version": "1.0.0",
+  "description": "Task 1. Caesar cipher CLI tool",
+  "main": "index.js",
+  "author": "SomeQA",
+  "license": "MIT",
+  "private": true
+}

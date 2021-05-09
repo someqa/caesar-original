@@ -1,7 +1,7 @@
 const { getShiftedString } = require('./shiftedString');
 const fs = require('fs');
 const { pipeline, Transform } = require('stream');
-const { stdin, stdout } = require('process');
+const { stdin, stdout, stderr } = require('process');
 
 function processInput(inputFilePath, shift, outputFilePath) {
   const transformer = new Transform({
@@ -12,10 +12,8 @@ function processInput(inputFilePath, shift, outputFilePath) {
   const output = outputFilePath ? fs.createWriteStream(outputFilePath, {flags:'a'}) : stdout;
   return pipeline(input, transformer, output, (err) => {
     if (err) {
-      console.error(
-        `\x1B[31m The following error occured when performing operation: \n`,
-        err.message,
-        '\n The text has NOT been processed! Please, fix the error and try again.\x1b[0m'
+      stderr.write(
+        `\x1B[31m The following error occured when performing operation: \n ${err.message}\n The text has NOT been processed! Please, fix the error and try again.\x1b[0m`
       );
       process.exit(1);
     }

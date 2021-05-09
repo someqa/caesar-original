@@ -6,6 +6,9 @@
   "author": "SomeQA",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "my_caesar_cli": "node index.js"
+  },
   "dependencies": {
     "commander": "^7.2.0"
   }

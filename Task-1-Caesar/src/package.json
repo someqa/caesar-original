@@ -5,5 +5,8 @@
   "main": "index.js",
   "author": "SomeQA",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "commander": "^7.2.0"
+  }
 }
